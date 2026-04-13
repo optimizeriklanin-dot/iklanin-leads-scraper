@@ -11,6 +11,8 @@ export function LeadsTable({ initialLeads }: { initialLeads: any[] }) {
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
 
+  const isLocal = typeof window !== 'undefined' ? (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') : true;
+
   const filteredLeads = leads.filter(
     (lead) =>
       lead.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -109,12 +111,22 @@ export function LeadsTable({ initialLeads }: { initialLeads: any[] }) {
         />
         
         <div className="flex gap-3">
-          <button
-            onClick={() => setShowModal(true)}
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
-          >
-            + Mulai Scrape
-          </button>
+          {isLocal ? (
+            <button
+              onClick={() => setShowModal(true)}
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+            >
+              + Mulai Scrape
+            </button>
+          ) : (
+            <button
+              onClick={() => alert("Batas Serverless: Mesin Scraper Chrome terlalu berat untuk server Vercel. Jalankan aplikasi ini (npm run dev) pada terminal Localhost (Laptop) Anda untuk menekan tombol ini. Sistem cloud Vercel ini khusus dirancang untuk monitor tabel prospek (Sales).")}
+              className="bg-gray-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+              title="Fitur Scrape hanya tersedia di Localhost"
+            >
+              🔒 Scrape lewat Localhost
+            </button>
+          )}
           
           <button
             onClick={exportCSV}
