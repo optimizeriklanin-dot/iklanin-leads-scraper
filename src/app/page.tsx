@@ -4,7 +4,7 @@ import { LeadsTable } from "@/components/LeadsTable";
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  let leads = [];
+  let leads: any[] = [];
   try {
     leads = await prisma.lead.findMany({
       orderBy: { createdAt: "desc" },
