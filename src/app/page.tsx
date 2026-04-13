@@ -1,10 +1,17 @@
 import { prisma } from "@/lib/db";
 import { LeadsTable } from "@/components/LeadsTable";
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
-  const leads = await prisma.lead.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  let leads = [];
+  try {
+    leads = await prisma.lead.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (error: any) {
+    console.error("Gagal koneksi DB di Vercel build:", error.message);
+  }
 
   return (
     <main className="min-h-screen bg-gray-50 p-8">
